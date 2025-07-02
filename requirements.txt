@@ -1,0 +1,6 @@
+sqlalchemy
+FastAPI
+flet
+pydantic
+uvicorn
+asyncpg
