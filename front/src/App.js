@@ -7,10 +7,27 @@ function App() {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Данные:', { username, password, email });
-    // Здесь будет отправка на бэкенд
+    try {
+      const url = isLogin ? '/authorisation' : '/registration';
+      const payload = isLogin ? { username, password } : { username, password, email };
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || 'Ошибка запроса');
+      }
+      const data = await res.json();
+      console.log('Успех:', data);
+      // Пример перехода после авторизации: window.location.href = '/home';
+      alert('Успешно');
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
